@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  id      String    @id
+  name    String
+  Devices Devices[]
+}
+
+model User {
+  id           String         @id
+  username     String         @unique
+  password     String
+  token        String
+  role         String
+  RefreshToken RefreshToken[]
+}
+
+model Devices {
+  id         String       @id
+  name       String
+  status     String
+  token      String
+  roomId     String
+  Room       Room         @relation(fields: [roomId], references: [id])
+  virtualpin Virtualpin[]
+}
+
+model Virtualpin {
+  id          String  @id
+  virtualName String
+  data        String
+  dataState   String
+  devicesId   String
+  devices     Devices @relation(fields: [devicesId], references: [id])
+}
+
+model RefreshToken {
+  id        String   @id
+  token     String   @unique
+  userId    String
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+}
