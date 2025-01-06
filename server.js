@@ -111,6 +111,7 @@ aedes.on("publish", async (packet, client) => {
           );
         } else if (virtualPinId == "status") {
           updateStatusDevice(deviceId, value);
+          sendEvent()
         } else {
           console.log(
             `Virtual pin ID ${virtualPinId} tidak valid untuk device ${deviceId}`
@@ -185,7 +186,6 @@ function updateDeviceStatus(client, status) {
     retain: true,
   });
   updateStatusDevice(client.id, status);
-  sendEvent(); // Kirim event setiap ada perubahan status
 }
 
 // Event MQTT untuk koneksi klien
